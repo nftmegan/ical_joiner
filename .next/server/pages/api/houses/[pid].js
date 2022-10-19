@@ -1,35 +1,116 @@
 "use strict";
-/*
- * ATTENTION: An "eval-source-map" devtool has been used.
- * This devtool is neither made for production nor for readable output files.
- * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
- * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
- * or disable the default devtool with "devtool: false".
- * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
- */
 (() => {
 var exports = {};
-exports.id = "pages/api/houses/[pid]";
-exports.ids = ["pages/api/houses/[pid]"];
+exports.id = 913;
+exports.ids = [913];
 exports.modules = {
 
-/***/ "fs":
-/*!*********************!*\
-  !*** external "fs" ***!
-  \*********************/
-/***/ ((module) => {
-
-module.exports = require("fs");
-
-/***/ }),
-
-/***/ "(api)/./pages/api/houses/[pid].js":
-/*!***********************************!*\
-  !*** ./pages/api/houses/[pid].js ***!
-  \***********************************/
+/***/ 163:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ handler)\n/* harmony export */ });\nconst config = [\n    {\n        id: 0,\n        house: \"Mia House\",\n        calendars: [\n            \"https://calendar.google.com/calendar/ical/468f5e6dcc759b59acfb804303b9c4db75a99a8aae079b8f23a75f04b3487038%40group.calendar.google.com/public/basic.ics\",\n            \"https://calendar.google.com/calendar/ical/6cb5568f453f48bf909e01e8cf2aa853a0c43f6757606a47924b5deed60a0621%40group.calendar.google.com/public/basic.ics\"\n        ]\n    }\n];\nconst fetch_ical = async (url)=>{\n    console.log(\"fetching \" + url);\n    var body = await fetch(url);\n    var data = await body.text();\n    const result = data.split(\"\\r\\nBEGIN:VEVENT\\r\\n\").map((el)=>el.split(\"END:VEVENT\\r\\n\")).reduce((acc, curr)=>acc.concat(curr));\n    result.shift();\n    result.pop();\n    const filtered_result = result.filter((w)=>w.length > 5);\n    var return_arr = [];\n    filtered_result.forEach((element)=>return_arr.push(element));\n    return return_arr;\n};\nconst fetch_all = async (pid)=>{\n    var final_result = `BEGIN:VCALENDAR\\r\\nPRODID:-//Google Inc//Google Calendar 70.9054//EN\\r\\nVERSION:2.0\\r\\nCALSCALE:GREGORIAN\\r\\nMETHOD:PUBLISH\\r\\nX-WR-CALNAME:TesteElvioFinal\\r\\nX-WR-TIMEZONE:Europe/Lisbon\\r\\n`;\n    for (const c of config[pid].calendars){\n        var result = await fetch_ical(c);\n        for (const e of result){\n            final_result += \"BEGIN:VEVENT\\r\\n\";\n            final_result += e;\n            final_result += \"END:VEVENT\\r\\n\";\n        }\n    }\n    final_result += \"END:VCALENDAR\";\n    return final_result;\n};\nasync function handler(req, res) {\n    const { pid  } = req.query;\n    //res.end(`Post: ${pid}`)\n    const result = await fetch_all(pid);\n    // include node fs module\n    var fs = __webpack_require__(/*! fs */ \"fs\");\n    // writeFile function with filename, content and callback function\n    await fs.promises.writeFile(\"public/calendar.ics\", result, function(err) {\n        if (err) throw err;\n        console.log(\"File is created successfully.\");\n    });\n    var filePath = \"public/calendar.ics\";\n    const imageBuffer = fs.readFileSync(filePath);\n    res.setHeader(\"Content-Type\", \"text/calendar\");\n    res.send(imageBuffer);\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9wYWdlcy9hcGkvaG91c2VzL1twaWRdLmpzLmpzIiwibWFwcGluZ3MiOiI7Ozs7QUFBQSxNQUFNQSxNQUFNLEdBQUc7SUFBQztRQUNaQyxFQUFFLEVBQUUsQ0FBQztRQUNMQyxLQUFLLEVBQUUsV0FBVztRQUNsQkMsU0FBUyxFQUFFO1lBQ1AseUpBQXlKO1lBQ3pKLHlKQUF5SjtTQUM1SjtLQUNKO0NBQUM7QUFFRixNQUFNQyxVQUFVLEdBQUcsT0FBT0MsR0FBRyxHQUFLO0lBQzlCQyxPQUFPLENBQUNDLEdBQUcsQ0FBQyxXQUFXLEdBQUdGLEdBQUcsQ0FBQyxDQUFDO0lBRS9CLElBQUlHLElBQUksR0FBRyxNQUFNQyxLQUFLLENBQUNKLEdBQUcsQ0FBQztJQUMzQixJQUFJSyxJQUFJLEdBQUcsTUFBTUYsSUFBSSxDQUFDRyxJQUFJLEVBQUU7SUFFNUIsTUFBTUMsTUFBTSxHQUFHRixJQUFJLENBQUNHLEtBQUssQ0FBQyxzQkFBc0IsQ0FBQyxDQUFDQyxHQUFHLENBQUNDLENBQUFBLEVBQUUsR0FBSUEsRUFBRSxDQUFDRixLQUFLLENBQUMsZ0JBQWdCLENBQUMsQ0FBQyxDQUFDRyxNQUFNLENBQUMsQ0FBQ0MsR0FBRyxFQUFFQyxJQUFJLEdBQUtELEdBQUcsQ0FBQ0UsTUFBTSxDQUFDRCxJQUFJLENBQUMsQ0FBQztJQUMvSE4sTUFBTSxDQUFDUSxLQUFLLEVBQUUsQ0FBQztJQUNmUixNQUFNLENBQUNTLEdBQUcsRUFBRSxDQUFDO0lBQ2IsTUFBTUMsZUFBZSxHQUFHVixNQUFNLENBQUNXLE1BQU0sQ0FBQ0MsQ0FBQUEsQ0FBQyxHQUFJQSxDQUFDLENBQUNDLE1BQU0sR0FBRyxDQUFDLENBQUM7SUFFeEQsSUFBSUMsVUFBVSxHQUFHLEVBQUU7SUFDbkJKLGVBQWUsQ0FBQ0ssT0FBTyxDQUFDQyxDQUFBQSxPQUFPLEdBQUlGLFVBQVUsQ0FBQ0csSUFBSSxDQUFDRCxPQUFPLENBQUMsQ0FBQyxDQUFDO0lBRTdELE9BQU9GLFVBQVUsQ0FBQztBQUN0QixDQUFDO0FBRUQsTUFBTUksU0FBUyxHQUFHLE9BQU9DLEdBQUcsR0FBSztJQUM3QixJQUFJQyxZQUFZLEdBQUcsQ0FBQyw4TEFBOEwsQ0FBQztJQUVuTixLQUFJLE1BQU1DLENBQUMsSUFBSWpDLE1BQU0sQ0FBQytCLEdBQUcsQ0FBQyxDQUFDNUIsU0FBUyxDQUFFO1FBQ2xDLElBQUlTLE1BQU0sR0FBRyxNQUFNUixVQUFVLENBQUM2QixDQUFDLENBQUM7UUFFaEMsS0FBSSxNQUFNQyxDQUFDLElBQUl0QixNQUFNLENBQUU7WUFDbkJvQixZQUFZLElBQUksa0JBQWtCLENBQUM7WUFDbkNBLFlBQVksSUFBSUUsQ0FBQyxDQUFDO1lBQ2xCRixZQUFZLElBQUksZ0JBQWdCLENBQUM7UUFDckMsQ0FBQztJQUNMLENBQUM7SUFFREEsWUFBWSxJQUFJLGVBQWUsQ0FBQztJQUVoQyxPQUFPQSxZQUFZLENBQUM7QUFDeEIsQ0FBQztBQUVjLGVBQWVHLE9BQU8sQ0FBQ0MsR0FBRyxFQUFFQyxHQUFHLEVBQUU7SUFDNUMsTUFBTSxFQUFFTixHQUFHLEdBQUUsR0FBR0ssR0FBRyxDQUFDRSxLQUFLO0lBQ3pCLHlCQUF5QjtJQUV6QixNQUFNMUIsTUFBTSxHQUFHLE1BQU1rQixTQUFTLENBQUNDLEdBQUcsQ0FBQztJQUNuQyx5QkFBeUI7SUFDekIsSUFBSVEsRUFBRSxHQUFHQyxtQkFBTyxDQUFDLGNBQUksQ0FBQztJQUV0QixrRUFBa0U7SUFDbEUsTUFBTUQsRUFBRSxDQUFDRSxRQUFRLENBQUNDLFNBQVMsQ0FBQyxxQkFBcUIsRUFBRTlCLE1BQU0sRUFBRSxTQUFVK0IsR0FBRyxFQUFFO1FBQzFFLElBQUlBLEdBQUcsRUFBRSxNQUFNQSxHQUFHLENBQUM7UUFDZnJDLE9BQU8sQ0FBQ0MsR0FBRyxDQUFDLCtCQUErQixDQUFDLENBQUM7SUFDakQsQ0FBQyxDQUFDLENBQUM7SUFFSCxJQUFJcUMsUUFBUSxHQUFHLHFCQUFxQjtJQUNwQyxNQUFNQyxXQUFXLEdBQUdOLEVBQUUsQ0FBQ08sWUFBWSxDQUFDRixRQUFRLENBQUM7SUFDN0NQLEdBQUcsQ0FBQ1UsU0FBUyxDQUFDLGNBQWMsRUFBRSxlQUFlLENBQUMsQ0FBQztJQUMvQ1YsR0FBRyxDQUFDVyxJQUFJLENBQUNILFdBQVcsQ0FBQyxDQUFDO0FBQzFCLENBQUMiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9zZXJ2ZXJfZWx2aW8vLi9wYWdlcy9hcGkvaG91c2VzL1twaWRdLmpzPzM0NTciXSwic291cmNlc0NvbnRlbnQiOlsiY29uc3QgY29uZmlnID0gW3tcbiAgICBpZDogMCxcbiAgICBob3VzZTogXCJNaWEgSG91c2VcIixcbiAgICBjYWxlbmRhcnM6IFtcbiAgICAgICAgXCJodHRwczovL2NhbGVuZGFyLmdvb2dsZS5jb20vY2FsZW5kYXIvaWNhbC80NjhmNWU2ZGNjNzU5YjU5YWNmYjgwNDMwM2I5YzRkYjc1YTk5YThhYWUwNzliOGYyM2E3NWYwNGIzNDg3MDM4JTQwZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbS9wdWJsaWMvYmFzaWMuaWNzXCIsXG4gICAgICAgIFwiaHR0cHM6Ly9jYWxlbmRhci5nb29nbGUuY29tL2NhbGVuZGFyL2ljYWwvNmNiNTU2OGY0NTNmNDhiZjkwOWUwMWU4Y2YyYWE4NTNhMGM0M2Y2NzU3NjA2YTQ3OTI0YjVkZWVkNjBhMDYyMSU0MGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20vcHVibGljL2Jhc2ljLmljc1wiXG4gICAgXVxufV1cblxuY29uc3QgZmV0Y2hfaWNhbCA9IGFzeW5jICh1cmwpID0+IHtcbiAgICBjb25zb2xlLmxvZyhcImZldGNoaW5nIFwiICsgdXJsKTtcblxuICAgIHZhciBib2R5ID0gYXdhaXQgZmV0Y2godXJsKTtcbiAgICB2YXIgZGF0YSA9IGF3YWl0IGJvZHkudGV4dCgpO1xuXG4gICAgY29uc3QgcmVzdWx0ID0gZGF0YS5zcGxpdChcIlxcclxcbkJFR0lOOlZFVkVOVFxcclxcblwiKS5tYXAoZWwgPT4gZWwuc3BsaXQoXCJFTkQ6VkVWRU5UXFxyXFxuXCIpKS5yZWR1Y2UoKGFjYywgY3VycikgPT4gYWNjLmNvbmNhdChjdXJyKSk7XG4gICAgcmVzdWx0LnNoaWZ0KCk7XG4gICAgcmVzdWx0LnBvcCgpO1xuICAgIGNvbnN0IGZpbHRlcmVkX3Jlc3VsdCA9IHJlc3VsdC5maWx0ZXIodyA9PiB3Lmxlbmd0aCA+IDUpXG4gICAgXG4gICAgdmFyIHJldHVybl9hcnIgPSBbXTtcbiAgICBmaWx0ZXJlZF9yZXN1bHQuZm9yRWFjaChlbGVtZW50ID0+IHJldHVybl9hcnIucHVzaChlbGVtZW50KSk7XG4gICAgXG4gICAgcmV0dXJuIHJldHVybl9hcnI7XG59XG5cbmNvbnN0IGZldGNoX2FsbCA9IGFzeW5jIChwaWQpID0+IHtcbiAgICB2YXIgZmluYWxfcmVzdWx0ID0gYEJFR0lOOlZDQUxFTkRBUlxcclxcblBST0RJRDotLy9Hb29nbGUgSW5jLy9Hb29nbGUgQ2FsZW5kYXIgNzAuOTA1NC8vRU5cXHJcXG5WRVJTSU9OOjIuMFxcclxcbkNBTFNDQUxFOkdSRUdPUklBTlxcclxcbk1FVEhPRDpQVUJMSVNIXFxyXFxuWC1XUi1DQUxOQU1FOlRlc3RlRWx2aW9GaW5hbFxcclxcblgtV1ItVElNRVpPTkU6RXVyb3BlL0xpc2JvblxcclxcbmA7XG5cbiAgICBmb3IoY29uc3QgYyBvZiBjb25maWdbcGlkXS5jYWxlbmRhcnMpIHtcbiAgICAgICAgdmFyIHJlc3VsdCA9IGF3YWl0IGZldGNoX2ljYWwoYyk7XG5cbiAgICAgICAgZm9yKGNvbnN0IGUgb2YgcmVzdWx0KSB7XG4gICAgICAgICAgICBmaW5hbF9yZXN1bHQgKz0gXCJCRUdJTjpWRVZFTlRcXHJcXG5cIjtcbiAgICAgICAgICAgIGZpbmFsX3Jlc3VsdCArPSBlO1xuICAgICAgICAgICAgZmluYWxfcmVzdWx0ICs9IFwiRU5EOlZFVkVOVFxcclxcblwiO1xuICAgICAgICB9XG4gICAgfVxuXG4gICAgZmluYWxfcmVzdWx0ICs9IFwiRU5EOlZDQUxFTkRBUlwiO1xuXG4gICAgcmV0dXJuIGZpbmFsX3Jlc3VsdDtcbn1cblxuZXhwb3J0IGRlZmF1bHQgYXN5bmMgZnVuY3Rpb24gaGFuZGxlcihyZXEsIHJlcykge1xuICAgIGNvbnN0IHsgcGlkIH0gPSByZXEucXVlcnlcbiAgICAvL3Jlcy5lbmQoYFBvc3Q6ICR7cGlkfWApXG5cbiAgICBjb25zdCByZXN1bHQgPSBhd2FpdCBmZXRjaF9hbGwocGlkKTtcbiAgICAvLyBpbmNsdWRlIG5vZGUgZnMgbW9kdWxlXG4gICAgdmFyIGZzID0gcmVxdWlyZSgnZnMnKTtcbiAgICBcbiAgICAvLyB3cml0ZUZpbGUgZnVuY3Rpb24gd2l0aCBmaWxlbmFtZSwgY29udGVudCBhbmQgY2FsbGJhY2sgZnVuY3Rpb25cbiAgICBhd2FpdCBmcy5wcm9taXNlcy53cml0ZUZpbGUoJ3B1YmxpYy9jYWxlbmRhci5pY3MnLCByZXN1bHQsIGZ1bmN0aW9uIChlcnIpIHtcbiAgICBpZiAoZXJyKSB0aHJvdyBlcnI7XG4gICAgICAgIGNvbnNvbGUubG9nKCdGaWxlIGlzIGNyZWF0ZWQgc3VjY2Vzc2Z1bGx5LicpO1xuICAgIH0pO1xuXG4gICAgdmFyIGZpbGVQYXRoID0gXCJwdWJsaWMvY2FsZW5kYXIuaWNzXCI7XG4gICAgY29uc3QgaW1hZ2VCdWZmZXIgPSBmcy5yZWFkRmlsZVN5bmMoZmlsZVBhdGgpO1xuICAgIHJlcy5zZXRIZWFkZXIoJ0NvbnRlbnQtVHlwZScsICd0ZXh0L2NhbGVuZGFyJyk7XG4gICAgcmVzLnNlbmQoaW1hZ2VCdWZmZXIpO1xufSJdLCJuYW1lcyI6WyJjb25maWciLCJpZCIsImhvdXNlIiwiY2FsZW5kYXJzIiwiZmV0Y2hfaWNhbCIsInVybCIsImNvbnNvbGUiLCJsb2ciLCJib2R5IiwiZmV0Y2giLCJkYXRhIiwidGV4dCIsInJlc3VsdCIsInNwbGl0IiwibWFwIiwiZWwiLCJyZWR1Y2UiLCJhY2MiLCJjdXJyIiwiY29uY2F0Iiwic2hpZnQiLCJwb3AiLCJmaWx0ZXJlZF9yZXN1bHQiLCJmaWx0ZXIiLCJ3IiwibGVuZ3RoIiwicmV0dXJuX2FyciIsImZvckVhY2giLCJlbGVtZW50IiwicHVzaCIsImZldGNoX2FsbCIsInBpZCIsImZpbmFsX3Jlc3VsdCIsImMiLCJlIiwiaGFuZGxlciIsInJlcSIsInJlcyIsInF1ZXJ5IiwiZnMiLCJyZXF1aXJlIiwicHJvbWlzZXMiLCJ3cml0ZUZpbGUiLCJlcnIiLCJmaWxlUGF0aCIsImltYWdlQnVmZmVyIiwicmVhZEZpbGVTeW5jIiwic2V0SGVhZGVyIiwic2VuZCJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(api)/./pages/api/houses/[pid].js\n");
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ handler)
+/* harmony export */ });
+const config = [
+    {
+        id: 0,
+        house: "Vila Abreu",
+        calendars: [
+            "https://www.airbnb.pt/calendar/ical/15086102.ics?s=c82ad431c86330317f16c719d230ab47",
+            "https://admin.booking.com/hotel/hoteladmin/ical.html?t=8546f284-1233-4ff3-a52b-539f1bdcd1cb",
+            "http://www.vrbo.com/icalendar/7f2affa11d52438194f9249f7219e608.ics?nonTentative"
+        ]
+    },
+    {
+        id: 1,
+        house: "Hillside Villa",
+        calendars: [
+            "https://www.airbnb.pt/calendar/ical/14992622.ics?s=0e545f45c7f663097acd2a6f75a037d8",
+            "https://admin.booking.com/hotel/hoteladmin/ical.html?t=e3c55094-e72e-4d11-b1a2-ae235c307886"
+        ]
+    },
+    {
+        id: 2,
+        house: "Casa Avo",
+        calendars: [
+            "https://www.airbnb.pt/calendar/ical/32133543.ics?s=daf8796d49f44f730a89acfe88d642b2",
+            "https://admin.booking.com/hotel/hoteladmin/ical.html?t=dbcb27ec-0391-4b0e-89c8-77c903ecc5ee", 
+        ]
+    },
+    {
+        id: 3,
+        house: "Villa Neto",
+        calendars: [
+            "https://www.airbnb.pt/calendar/ical/31161476.ics?s=02dd56e51355ff4119d86b5258e12533",
+            "https://admin.booking.com/hotel/hoteladmin/ical.html?t=5ad16ee7-21ca-4cfb-a2c9-05a741553c69", 
+        ]
+    },
+    {
+        id: 4,
+        house: "Villa Castanho",
+        calendars: [
+            "https://admin.booking.com/hotel/hoteladmin/ical.html?t=9560b63d-42fa-43db-99e6-395106930b93",
+            "https://www.airbnb.pt/calendar/ical/625822947455859803.ics?s=92c45442eda5fd6ccd46916c475cbd46", 
+        ]
+    }
+];
+const fetch_ical = async (url)=>{
+    console.log("-----------------> Fetching " + url);
+    var body = await fetch(url);
+    var data = await body.text();
+    var data_split = data.split(/\r?\n/);
+    var entry_list = [];
+    var current_entry = [];
+    var inEvent = false;
+    for (var line of data_split){
+        var lineCheckArray = line.split(":");
+        if (!(lineCheckArray[0].toUpperCase() === lineCheckArray[0] && lineCheckArray.length > 1)) {
+            continue;
+        }
+        if (!inEvent) {
+            if (line === "BEGIN:VEVENT") {
+                inEvent = true;
+                current_entry = [];
+                current_entry.push(line);
+            }
+        } else {
+            if (line === "END:VEVENT") {
+                inEvent = false;
+                current_entry.push(line);
+                entry_list.push(current_entry);
+                continue;
+            } else {
+                current_entry.push(line);
+            }
+        }
+    }
+    return entry_list;
+};
+const fetch_all = async (pid)=>{
+    console.log("-----------------> FETCHING ALL CALENDARS FOR PID " + pid);
+    var final_result = `BEGIN:VCALENDAR\r\nPRODID:-//Google Inc//Google Calendar 70.9054//EN\r\nVERSION:2.0\r\nCALSCALE:GREGORIAN\r\nMETHOD:PUBLISH\r\nX-WR-CALNAME:TesteElvioFinal\r\nX-WR-TIMEZONE:Europe/Lisbon\r\n`;
+    for (const c of config[pid].calendars){
+        var result = await fetch_ical(c);
+        for (const entry of result){
+            for (const line of entry){
+                final_result += line + "\r\n";
+            }
+        }
+    }
+    final_result += "END:VCALENDAR";
+    return final_result;
+};
+async function handler(req, res) {
+    const { pid  } = req.query;
+    const result = await fetch_all(pid);
+    const calendarBuffer = Buffer.from(result, "utf-8");
+    const downloadFileName = config[pid].house.toLowerCase().replaceAll(" ", "_") + "_calendar.ics";
+    res.setHeader("Content-Type", "text/calendar");
+    res.setHeader("Content-Disposition", "attachment; filename=" + downloadFileName);
+    res.send(calendarBuffer);
+}
+
 
 /***/ })
 
@@ -40,7 +121,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = (__webpack_exec__("(api)/./pages/api/houses/[pid].js"));
+var __webpack_exports__ = (__webpack_exec__(163));
 module.exports = __webpack_exports__;
 
 })();
